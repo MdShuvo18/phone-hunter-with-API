@@ -35,10 +35,10 @@ const displayPhones = phones => {
 
         <h2 class="card-title">${phone.phone_name}</h2>
 
-        <p>If a dog chews shoes whose shoes does he choose?</p>
+        <p>${phone.slug}</p>
 
-        <div class="card-actions justify-end">
-        <button class="btn btn-primary">Buy Now</button>
+        <div class="card-actions justify-center">
+        <button onclick="showDetailsHandler('${phone.slug}')" class="btn btn-primary">Show Details</button>
         </div>
 
         </div>  
@@ -48,6 +48,31 @@ const displayPhones = phones => {
         phoneContainer.appendChild(createPhoneDiv)
     });
     loadingSpinner(false);
+}
+
+const showDetailsHandler = async (id) => {
+    const res = await fetch(`https://openapi.programming-hero.com/api/phone/${id}`);
+    const data = await res.json();
+    // console.log(data);
+
+    const phone = data.data;
+
+    modalHandler(phone)
+}
+
+const modalHandler = (phone) => {
+    console.log(phone);
+    const modalPhone = document.getElementById('modal-phone-id');
+    modalPhone.innerText = phone.name;
+
+    const phoneDivContainer = document.getElementById('modal-phone-div-container');
+    phoneDivContainer.innerHTML = `
+    <img src="${phone.image}"
+    alt="" />
+    <p>Storage : ${phone?.mainFeatures?.storage}</p>
+    <p>GPS : ${phone?.others?.GPS}</p>
+    `
+    show_details_modal.showModal()
 }
 
 const buttonHandler = () => {
